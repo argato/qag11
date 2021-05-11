@@ -61,7 +61,7 @@ public class AddingToCartTests extends TestBase {
     sleep(3000);
     closeWidget();
     resultItem.$("button.buy-button__button").click();
-    sleep(6000);
+    $(".cart-add-banner button.cart-add-banner__close").click();
     $(".desktop-only .goods-count").shouldHave(Condition.text("1"));
   }
 

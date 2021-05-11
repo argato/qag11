@@ -1,54 +1,45 @@
 package test;
 
-import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
-import static helper.AttachmentHelper.attachAsText;
-import static helper.AttachmentHelper.attachPageSource;
-import static helper.AttachmentHelper.attachScreenshot;
-import static helper.AttachmentHelper.attachVideo;
-import static helper.AttachmentHelper.getConsoleLogs;
+import static helper.AttachmentsHelper.attachAsText;
+import static helper.AttachmentsHelper.attachPageSource;
+import static helper.AttachmentsHelper.attachScreenshot;
+import static helper.AttachmentsHelper.attachVideo;
+import static helper.DriverHelper.configureDriver;
+import static helper.DriverHelper.getConsoleLogs;
+import static helper.DriverHelper.getSessionId;
+import static helper.DriverHelper.isVideoOn;
 
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import config.DriverConfig;
-import io.qameta.allure.selenide.AllureSelenide;
+import io.qameta.allure.junit5.AllureJunit5;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith({AllureJunit5.class})
 public class TestBase {
 
   static DriverConfig driverConfig = ConfigFactory.create(DriverConfig.class);
   static String BASE_URL = "https://sbermegamarket.ru/";
 
   @BeforeAll
-  static void setup() {
-    addListener("AllureSelenide", new AllureSelenide());
-    DesiredCapabilities capabilities = new DesiredCapabilities();
-    capabilities.setCapability("enableVNC", true);
-    capabilities.setCapability("enableVideo", true);
-    Configuration.browserCapabilities = capabilities;
-    Configuration.browser = System.getProperty("web.browser", "chrome");
-    Configuration.startMaximized = Boolean.parseBoolean(
-        System.getProperty("start.maximized"));
-
-    String remoteWebDriver = System.getProperty("remote.web.driver");
-
-    if (remoteWebDriver != null) {
-      String user = driverConfig.remoteWebUser();
-      String password = driverConfig.remoteWebPassword();
-      Configuration.remote = String.format(remoteWebDriver, user, password);
-    }
+  static void setUp() {
+    configureDriver();
   }
 
   @AfterEach
-  void afterEach() {
+  public void addAttachments() {
+    String sessionId = getSessionId();
+
     attachScreenshot("Last screenshot");
     attachPageSource();
     attachAsText("Browser console logs", getConsoleLogs());
-    if (System.getProperty("video.storage") != null) {
-      attachVideo();
+
+    WebDriverRunner.closeWebDriver();
+
+    if (isVideoOn()) {
+      attachVideo(sessionId);
     }
-    closeWebDriver();
   }
 }

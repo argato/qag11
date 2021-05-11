@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 @Owner("arina_ng")
 @Feature("Каталог")
-@Story("Отображение раделов")
+@Story("Отображение разделов")
 @Tag("smoke")
 public class CatalogTests extends TestBase {
 
