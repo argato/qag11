@@ -10,9 +10,7 @@ import static helper.DriverHelper.getSessionId;
 import static helper.DriverHelper.isVideoOn;
 
 import com.codeborne.selenide.WebDriverRunner;
-import config.DriverConfig;
 import io.qameta.allure.junit5.AllureJunit5;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith({AllureJunit5.class})
 public class TestBase {
 
-  static DriverConfig driverConfig = ConfigFactory.create(DriverConfig.class);
   static String BASE_URL = "https://sbermegamarket.ru/";
 
   @BeforeAll

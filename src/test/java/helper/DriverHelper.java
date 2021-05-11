@@ -60,7 +60,6 @@ public class DriverHelper {
   public static void configureDriver() {
     addListener("AllureSelenide", new AllureSelenide());
 
-//        Configuration.baseUrl = TestData.getWebUrl();
     Configuration.browser = getDriverConfig().webBrowser();
     Configuration.browserVersion = getDriverConfig().webBrowserVersion();
     Configuration.browserSize = getDriverConfig().webBrowserSize();
