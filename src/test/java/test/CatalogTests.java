@@ -3,7 +3,6 @@ package test;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.switchTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.codeborne.selenide.Condition;
@@ -20,12 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 @Owner("arina_ng")
-@Feature("Аторизация")
-@Story("Отображение окна входа")
+@Feature("Каталог")
+@Story("Отображение раделов")
 @Tag("smoke")
 public class CatalogTests extends TestBase {
 
@@ -35,7 +32,7 @@ public class CatalogTests extends TestBase {
   }
 
   @Test
-  @DisplayName("Отображение панели входа")
+  @DisplayName("Отображение списка разделов при нажатии кнопки Каталог")
   @Severity(SeverityLevel.MINOR)
   void expandCatalogTest() {
     ArrayList<String> expectedListOfTitles = new ArrayList<>(
@@ -47,7 +44,6 @@ public class CatalogTests extends TestBase {
                 "Продукты питания", "Здоровье", "Дача, сезонные товары",
                 "Товары для взрослых", "Товары для геймеров",
                 "Фандом атрибутика"));
-    closeWidget();
     $("#page-header .header-catalog-menu__wrapper")
         .shouldHave(Condition.exactText("Каталог")).click();
 
@@ -59,9 +55,12 @@ public class CatalogTests extends TestBase {
     assertEquals(expectedListOfTitles, listOfTitlesFromWeb);
   }
 
-  void closeWidget() {
-    WebElement widgetFrame = $(".flocktory-widget-overlay[data-showed-up=true] .flocktory-widget");
-    switchTo().frame(widgetFrame).findElement(By.className("close")).click();
-    switchTo().defaultContent();
+  @Test
+  @DisplayName("Отображение списка подразделов при наведении курсора на карточку раздела")
+  @Severity(SeverityLevel.MINOR)
+  void ShowingWidgetTest() {
+    $$(".menu-cards__inner").findBy(Condition.text("Бытовая техника")).hover();
+    $$(".menu-cards__inner").findBy(Condition.text("Крупная техника для кухни")).shouldBe(
+        Condition.visible);
   }
 }
